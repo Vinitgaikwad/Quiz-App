@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client"
   output   = "../generated/prisma"
@@ -13,7 +7,6 @@ datasource db {
   provider = "postgresql"
 }
 
-// User Relationals 
 model User {
   id       Int    @id @default(autoincrement())
   username String @unique
@@ -35,37 +28,29 @@ model Result {
   user   User @relation(fields: [userId], references: [id])
   userId Int
 
-  scores Score[]
+  marks   Int          @default(0)
+  answers UserAnswer[]
+
+  quiz   Quiz @relation(fields: [quizId], references: [id])
+  quizId Int
 }
 
-model Score {
+model UserAnswer {
   id Int @id @default(autoincrement())
 
-  marks Int @default(0)
-
-  quiz   Quiz     @relation(fields: [quizid], references: [id])
-  quizid Int
-  answer Answer[]
+  questionId Int
+  userAns    String
 
   result   Result @relation(fields: [resultId], references: [id])
   resultId Int
 }
 
-model Answer {
-  id         Int    @id @default(autoincrement())
-  questionid Int
-  userans    String
-  score      Score  @relation(fields: [scoreId], references: [id])
-  scoreId    Int
-}
-
-// Quiz Relations
 model Quiz {
   id          Int        @id @default(autoincrement())
   title       String
   description String?
   questions   Question[]
-  scores      Score[]
+  results     Result[]
 }
 
 model Question {
@@ -76,8 +61,8 @@ model Question {
   options       String[]
   correctAnswer String[]
 
-  quizRef Quiz @relation(fields: [quizid], references: [id])
-  quizid  Int
+  quiz   Quiz @relation(fields: [quizId], references: [id])
+  quizId Int
 }
 
 enum QuestionType {
