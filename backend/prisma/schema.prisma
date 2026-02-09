@@ -12,3 +12,75 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+// User Relationals 
+model User {
+  id       Int    @id @default(autoincrement())
+  username String @unique
+  password String
+  role     Role   @default(User)
+
+  results Result[]
+}
+
+enum Role {
+  Admin
+  User
+  SuperAdmin
+}
+
+model Result {
+  id Int @id @default(autoincrement())
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+
+  scores Score[]
+}
+
+model Score {
+  id Int @id @default(autoincrement())
+
+  marks Int @default(0)
+
+  quiz   Quiz     @relation(fields: [quizid], references: [id])
+  quizid Int
+  answer Answer[]
+
+  result   Result @relation(fields: [resultId], references: [id])
+  resultId Int
+}
+
+model Answer {
+  id         Int    @id @default(autoincrement())
+  questionid Int
+  userans    String
+  score      Score  @relation(fields: [scoreId], references: [id])
+  scoreId    Int
+}
+
+// Quiz Relations
+model Quiz {
+  id          Int        @id @default(autoincrement())
+  title       String
+  description String?
+  questions   Question[]
+  scores      Score[]
+}
+
+model Question {
+  id           Int          @id @default(autoincrement())
+  question     String
+  questiontype QuestionType @default(MultipleChoice)
+
+  options       String[]
+  correctAnswer String[]
+
+  quizRef Quiz @relation(fields: [quizid], references: [id])
+  quizid  Int
+}
+
+enum QuestionType {
+  MultipleChoice
+  TextBased
+}
