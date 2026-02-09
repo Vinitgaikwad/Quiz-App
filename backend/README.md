@@ -1,0 +1,11 @@
+--
+prisma
+zod
+bcrypt
+postgres
+ts
+express
+dotenv
+cors
+jsonwebtoken
+--
