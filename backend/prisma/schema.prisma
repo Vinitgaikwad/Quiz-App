@@ -7,6 +7,7 @@ datasource db {
   provider = "postgresql"
 }
 
+// User
 model User {
   id       Int    @id @default(autoincrement())
   username String @unique
@@ -45,6 +46,7 @@ model UserAnswer {
   resultId Int
 }
 
+// Quiz
 model Quiz {
   id          Int        @id @default(autoincrement())
   title       String
@@ -58,8 +60,8 @@ model Question {
   question     String
   questiontype QuestionType @default(MultipleChoice)
 
-  options       String[]
-  correctAnswer String[]
+  options        String[]
+  correctAnswers String[]
 
   quiz   Quiz @relation(fields: [quizId], references: [id])
   quizId Int
