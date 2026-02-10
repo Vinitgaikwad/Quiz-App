@@ -8,7 +8,9 @@
     // See also https://aka.ms/tsconfig/module
     "module": "ESNext",
     "target": "ES2023",
-    "types": [],
+    "types": [
+      "node"
+    ],
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],
@@ -32,6 +34,7 @@
     "jsx": "react-jsx",
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
+    "moduleResolution": "node",
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
@@ -43,6 +46,9 @@
     }
   },
   "include": [
-    "src"
+    "src",
+  ],
+  "exclude": [
+    "prisma.config.ts"
   ]
 }
