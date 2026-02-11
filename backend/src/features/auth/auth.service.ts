@@ -1,8 +1,58 @@
-// sign up and sign in 
+import { prisma } from "@/db";
 import type { UserCredType } from "./auth.schema";
+import { hashPassword, verifyPassword } from "@/utils";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
+import { AuthenticationError, ResourceConflict } from "@/errors/custom.errors";
 
-export function signUpHandler(userObj: UserCredType) {
-    const { username, password, retype } = userObj;
+export async function signUpHandler(userObj: UserCredType) {
+    try {
+        const { username, password } = userObj;
+
+        const hash = await hashPassword(password);
+
+        const user = await prisma.user.create({
+            data: {
+                username,
+                password: hash
+            }
+        });
+
+        return user;
+    } catch (error) {
+        if (error instanceof PrismaClientKnownRequestError) {
+            throw new ResourceConflict("Username Taken");
+        }
+
+        throw error;
+    }
+}
 
 
+export async function signInHandler(userObj: UserCredType) {
+    try {
+        const { username, password } = userObj;
+        const hash = await hashPassword(password);
+
+        const findUser = await prisma.user.findFirst({
+            where: {
+                username,
+            },
+            omit: {
+                role: true,
+            }
+        });
+
+        if (!findUser) {
+            throw new AuthenticationError("Invalid Credentials");
+        }
+
+        const verifyPwd = await verifyPassword(password, findUser.password);
+
+        if (verifyPwd) {
+            throw new AuthenticationError("Incorrect username or password");
+        }
+
+    } catch (error) {
+
+    }
 }

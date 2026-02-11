@@ -1,6 +1,6 @@
 import { hash } from "bcrypt"
 
 
-export function hashPassword(password: string) {
-    return hash(password, 12)
+export async function hashPassword(password: string) {
+    return await hash(password, 12)
 }
