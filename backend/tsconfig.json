@@ -39,6 +39,7 @@
     "moduleDetection": "force",
     "skipLibCheck": true,
     "baseUrl": ".",
+    "allowSyntheticDefaultImports": true,
     "paths": {
       "@/*": [
         "src/*"

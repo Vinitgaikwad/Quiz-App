@@ -1,4 +1,4 @@
-import { ErrorTypes } from "@/types";
+import { ErrorTypes } from "@/types/enums";
 
 export class AppError extends Error {
     errorCode: ErrorTypes;
