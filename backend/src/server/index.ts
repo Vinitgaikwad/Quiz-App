@@ -1,9 +1,12 @@
-import express, { type Request, type Response } from 'express';
+import { errorHandler } from '@/errors/errorHandler';
+import { userRouter } from '@/features';
+import express from 'express';
 
 const app = express();
 
 export function StartServer() {
     const PORT = 3000;
+    app.use(express.json())
 
     HandleRoutes();
 
@@ -13,5 +16,7 @@ export function StartServer() {
 }
 
 function HandleRoutes() {
-    console.log("Routes Loaded")
+
+    app.use("/user", userRouter);
+    app.use(errorHandler);
 }

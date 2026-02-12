@@ -1,6 +1,6 @@
 import { prisma } from "@/db";
 import type { UserCredType } from "./auth.schema";
-import { hashPassword, verifyPassword } from "@/utils";
+import { createToken, hashPassword, verifyPassword } from "@/utils";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 import { AuthenticationError, ResourceConflict } from "@/errors/custom.errors";
 
@@ -31,7 +31,6 @@ export async function signUpHandler(userObj: UserCredType) {
 export async function signInHandler(userObj: UserCredType) {
     try {
         const { username, password } = userObj;
-        const hash = await hashPassword(password);
 
         const findUser = await prisma.user.findFirst({
             where: {
@@ -48,11 +47,13 @@ export async function signInHandler(userObj: UserCredType) {
 
         const verifyPwd = await verifyPassword(password, findUser.password);
 
-        if (verifyPwd) {
-            throw new AuthenticationError("Incorrect username or password");
+        if (!verifyPwd) {
+            throw new AuthenticationError("Incorrect Username or Password");
         }
 
-    } catch (error) {
+        return createToken({ username: findUser.username, userID: findUser.id })
 
+    } catch (error) {
+        throw error
     }
 }

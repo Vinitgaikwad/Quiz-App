@@ -1,7 +1,7 @@
-import type { NextFunction, Request } from "express";
-import type { ZodAny } from "zod";
+import type { NextFunction, Request, Response } from "express";
+import type { ZodType } from "zod";
 
-export function verifyZodSchema(zodSchema: ZodAny) {
+export function verifyZodSchema(zodSchema: ZodType) {
     return (req: Request, res: Response, next: NextFunction) => {
         try {
             const body = req.body;
