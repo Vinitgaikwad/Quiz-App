@@ -22,7 +22,6 @@ export async function signUpHandler(userObj: UserCredType) {
         if (error instanceof PrismaClientKnownRequestError) {
             throw new ResourceConflict("Username Taken");
         }
-
         throw error;
     }
 }
@@ -35,9 +34,6 @@ export async function signInHandler(userObj: UserCredType) {
         const findUser = await prisma.user.findFirst({
             where: {
                 username,
-            },
-            omit: {
-                role: true,
             }
         });
 
@@ -51,7 +47,7 @@ export async function signInHandler(userObj: UserCredType) {
             throw new AuthenticationError("Incorrect Username or Password");
         }
 
-        return createToken({ username: findUser.username, userID: findUser.id })
+        return createToken({ username: findUser.username, userID: findUser.id, role: findUser.role })
 
     } catch (error) {
         throw error
