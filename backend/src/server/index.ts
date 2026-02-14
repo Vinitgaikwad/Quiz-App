@@ -1,5 +1,6 @@
 import { errorHandler } from '@/errors/errorHandler';
 import { userRouter } from '@/features';
+import { quizRouter } from '@/features/quiz/quiz.router';
 import express from 'express';
 
 const app = express();
@@ -18,5 +19,6 @@ export function StartServer() {
 function HandleRoutes() {
 
     app.use("/user", userRouter);
+    app.use('/admin', quizRouter);
     app.use(errorHandler);
 }

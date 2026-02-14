@@ -8,7 +8,15 @@ export const questionSchema = zod.object({
     options: zod.array(zod.string()),
     correctAnswers: zod.array(zod.string()),
     quizId: zod.number()
-});
+}).refine(data => {
+    if (data.questiontype === "MultipleChoice") {
+        return data.options.length > 0;
+    }
+    return true;
+}, {
+    message: "Multiple choice questions must have options",
+    path: ["options"]
+});;
 
 export const quizSchema = zod.object({
     id: zod.number().optional(),

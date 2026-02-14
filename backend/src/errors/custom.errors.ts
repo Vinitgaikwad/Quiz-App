@@ -34,3 +34,9 @@ export class AuthenticationError extends AppError {
         super(message, ErrorTypes.AuthenticationError);
     }
 }
+
+export class BadRequest extends AppError {
+    constructor(message = "Inavalid Data or Bad Request") {
+        super(message, ErrorTypes.BadRequest);
+    }
+}
