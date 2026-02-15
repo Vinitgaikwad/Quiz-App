@@ -4,6 +4,50 @@ import { PrismaClientValidationError } from "@prisma/client/runtime/client";
 import { PrismaClientKnownRequestError } from "@/generated/prisma/internal/prismaNamespace";
 import { BadRequest } from "@/errors/custom.errors";
 
+
+export async function getQuiz(userId: number) {
+    try {
+        const quizs = await prisma.quiz.findMany({
+            where: {
+                userId
+            }
+        });
+        return quizs
+    } catch (error) {
+        if (error instanceof PrismaClientKnownRequestError && error.code === "P2025") {
+            throw new BadRequest("Quiz not found or you don't have permission to update it")
+        }
+        if (error instanceof PrismaClientValidationError || error instanceof PrismaClientKnownRequestError) {
+            throw new BadRequest("Invalid Data or Bad Request")
+        }
+        throw error;
+    }
+}
+
+export async function getQuestions(quiz: Quiz, userId: number) {
+    try {
+        const { id } = quiz;
+        if (!id) {
+            throw new BadRequest("Invalid data provided");
+        }
+
+        const quizQuestions = prisma.question.findMany({
+            where: {
+                quizId: id
+            }
+        });
+        return quizQuestions;
+    } catch (error) {
+        if (error instanceof PrismaClientKnownRequestError && error.code === "P2025") {
+            throw new BadRequest("Quiz not found");
+        }
+        if (error instanceof PrismaClientValidationError || error instanceof PrismaClientKnownRequestError) {
+            throw new BadRequest("Invalid Data or Bad Request");
+        }
+        throw error;
+    }
+}
+
 export async function createQuiz(quiz: Quiz, userId: number) {
     try {
         const { title, description } = quiz;
@@ -18,7 +62,6 @@ export async function createQuiz(quiz: Quiz, userId: number) {
         });
         return quizData;
     } catch (error) {
-        console.log(error);
         if (error instanceof PrismaClientValidationError || error instanceof PrismaClientKnownRequestError) {
             throw new BadRequest("Invalid Data or Bad Request")
         }
@@ -161,3 +204,4 @@ export async function deleteQuestion(question: Question) {
         throw error;
     }
 }
+
