@@ -70,7 +70,7 @@ export async function createQuiz(quiz: Quiz, userId: number) {
     }
 }
 
-export async function createQuestions(questionObj: Question, quizID: number) {
+export async function createQuestions(questionObj: Question) {
     try {
         const { quizId, question, questiontype, options, correctAnswers } = questionObj;
 
@@ -95,7 +95,7 @@ export async function createQuestions(questionObj: Question, quizID: number) {
     }
 }
 
-export async function updateQuiz(quiz: Quiz, quizID: number) {
+export async function updateQuiz(quiz: Quiz) {
     try {
         const { id, title, description } = quiz;
         if (!id) {
@@ -105,7 +105,7 @@ export async function updateQuiz(quiz: Quiz, quizID: number) {
         const updatedQuiz = await prisma.quiz.update({
             where: {
                 id: id,
-                userId: quizID
+                userId: quiz.userId
             },
             data: {
                 ...(title && { title }),

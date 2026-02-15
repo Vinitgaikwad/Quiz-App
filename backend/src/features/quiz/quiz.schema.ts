@@ -22,7 +22,8 @@ export const quizSchema = zod.object({
     id: zod.number().optional(),
     title: zod.string(),
     description: zod.string().optional(),
-    questions: zod.array(questionSchema).optional()
+    questions: zod.array(questionSchema).optional(),
+    userId: zod.number()
 });
 
 export type Quiz = zod.infer<typeof quizSchema>
