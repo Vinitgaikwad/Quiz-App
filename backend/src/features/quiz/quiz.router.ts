@@ -9,4 +9,4 @@ export const quizRouter = Router();
 quizRouter.use(adminAuth);
 
 quizRouter.post("/create-quiz", verifyZodSchema(quizSchema), createQuizController);
-quizRouter.post("/create-quiz", verifyZodSchema(questionSchema), createQuestionController);
+quizRouter.post("/create-questions", verifyZodSchema(questionSchema), createQuestionController);

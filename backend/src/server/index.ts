@@ -17,7 +17,6 @@ export function StartServer() {
 }
 
 function HandleRoutes() {
-
     app.use("/user", userRouter);
     app.use('/admin', quizRouter);
     app.use(errorHandler);

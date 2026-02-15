@@ -14,7 +14,8 @@ model User {
   password String
   role     Role   @default(User)
 
-  results Result[]
+  createdResults Result[]
+  createdQuizzes Quiz[]
 }
 
 enum Role {
@@ -29,8 +30,8 @@ model Result {
   user   User @relation(fields: [userId], references: [id])
   userId Int
 
-  marks   Int          @default(0)
-  answers UserAnswer[]
+  marks          Int          @default(0)
+  createdAnswers UserAnswer[]
 
   quiz   Quiz @relation(fields: [quizId], references: [id])
   quizId Int
@@ -50,11 +51,14 @@ model UserAnswer {
 
 // Quiz
 model Quiz {
-  id          Int        @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   title       String
   description String?
-  questions   Question[]
-  results     Result[]
+
+  userRef          User       @relation(fields: [userId], references: [id])
+  userId           Int
+  createdQuestions Question[]
+  results          Result[]
 }
 
 model Question {
@@ -62,8 +66,8 @@ model Question {
   question     String
   questiontype QuestionType @default(MultipleChoice)
 
-  options        String[]
-  correctAnswers String[]
+  createdOptions        String[]
+  createdCorrectAnswers String[]
 
   quiz   Quiz @relation(fields: [quizId], references: [id])
   quizId Int
