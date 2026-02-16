@@ -31,6 +31,7 @@ model Result {
   userId Int
 
   marks          Int          @default(0)
+  time           DateTime     @default(now())
   createdAnswers UserAnswer[]
 
   quiz   Quiz @relation(fields: [quizId], references: [id])
